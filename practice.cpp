@@ -11,7 +11,10 @@
 // Bitwise
 // Greedy
 // Divide and Conquer
-// Stack (Monotonus) Queue (Dequeue) BST Priority Queue
+// Stack (Monotonus)
+// Queue (Dequeue)
+// BST
+// Priority Queue
 // Sliding Window
 // Prefix Sum suffix sum
 // Two Pointers
@@ -33,27 +36,6 @@ typedef vector<ll> vl;
 typedef vector<vl> vvl;
 long long mod = 1e9 + 7;
 
-struct custom_hash
-{
-    static uint64_t splitmix64(uint64_t x)
-    {
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-        return x ^ (x >> 31);
-    }
-
-    size_t operator()(uint64_t x) const
-    {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
-    }
-};
-int sqr(int x)
-{
-    return x * x;
-}
-constexpr int MAXSUM = 100 * 100 + 10;
 int countPrimes(int n)
 {
     if (n <= 2)
@@ -77,35 +59,19 @@ int countPrimes(int n)
     }
     return count;
 }
-long long binpow(long long a, long long b)
+bool checkSorted(vector<ll> ans)
 {
-    long long res = 1;
-    while (b > 0)
+    for (ll i = 1; i < ans.size(); i++)
     {
-        if (b & 1)
-            res = res * a;
-        a = a * a;
-        b >>= 1;
+        if (ans[i] < ans[i - 1])
+            return false;
     }
-    return res;
+    return true;
 }
-ll solve(string &s, ll k, vector<int> &dp, int i)
+void solve()
 {
-    if (i >= s.size() - 1)
-        return 0;
-    if (dp[i] != -1)
-        return dp[i];
-    ll ans = INT_MAX;
+}
 
-    if ((s[i] - '0') ^ (s[i + 1] - '0') and k)
-    {
-        swap(s[i], s[i + 1]);
-        ans = stol(s.substr(i, 2)) + solve(s, k - 1, dp, i + 1);
-        swap(s[i], s[i + 1]);
-    }
-    ans = min(ans, stol(s.substr(i, 2)) + solve(s, k, dp, i + 1));
-    return dp[i] = ans;
-}
 int main()
 {
 #ifndef ONLINE_JUDGE
@@ -115,13 +81,24 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t = 1;
+    int t;
     cin >> t;
     while (t--)
     {
         int n;
-        cin>>n;
+        cin >> n;
+        int ans[n];
+        for (int i = 0; i < n; i++)
+            cin >> ans[i];
+        int ans = -1;
+        unordered_map<int, int> um;
+        for (int i = 0; i < n; i++)
+        {
+            if (um.find(ans[i]) != um.end())
+                ans = max(ans, (um[ans[i]]) + n - i);
+            um[ans[i]] = i;
+        }
+        cout << ans << endl;
     }
-
     return 0;
 }

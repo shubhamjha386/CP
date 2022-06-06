@@ -15,6 +15,8 @@
 // Sliding Window
 // Prefix Sum suffix sum
 // Two Pointers
+// Disjoint Sets
+// Segment Trees
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -53,46 +55,20 @@ int countPrimes(int n)
     }
     return count;
 }
-
+long long binpow(long long a, long long b)
+{
+    long long res = 1;
+    while (b > 0)
+    {
+        if (b & 1)
+            res = res * a;
+        a = a * a;
+        b >>= 1;
+    }
+    return res;
+}
 void solve()
 {
-    int n, k;
-    cin >> n >> k;
-    int arr[n];
-    for (int i = 0; i < n; i++)
-        cin >> arr[i];
-    sort(arr, arr + n);
-
-    int mino = INT_MAX;
-
-    for (int i = 0; i <= n - k; i++)
-    {
-        int j = i, mine = arr[j];
-        while (j < n and arr[j] == mine)
-            j++;
-        if (j == i + k)
-        {
-            cout << 0 << endl;
-            return;
-        }
-        int tmp = 0;
-        while (j < i + k)
-        {
-            tmp += (arr[j] - arr[i] + 1) / 2;
-            j++;
-        }
-        mino = min(mino, tmp);
-    }
-    cout << mino << endl;
-}
-
-static bool compare(pll a,pll b)
-{
-    if(a.first==b.first)
-    {
-        return a.second>b.second;
-    }
-    return a.first<b.first;
 }
 
 int main()
@@ -108,37 +84,33 @@ int main()
     cin >> t;
     while (t--)
     {
-        ll n,m;
-        cin>>n>>m;
-        vector<pll> ps;
-        for(ll i=0;i<n*m;i++)
-            {
-                int x;
-                cin>>x;
-                ps.push_back({x,i+1});
-            }
-        sort(ps.begin(),ps.end(),compare);
-        int seats[m+1];
-        for(int i=1;i<=n*m;i++)
+        int n, k;
+        cin >> n >> k;
+        int a[n], bit[31] = {0};
+        for (int i = 0; i < n; i++)
         {
-            seats[ps[i-1].second] = i;
+            cin >> a[i];
         }
-        int occupied[m+1] = {0};
-        occupied[seats[1]]++;
-        ll total = 0;
-        for(int i=2;i<=n*m;i++)
+        for (int j = 30; j >= 0; j--)
         {
-            ll o = 0;
-            for(int j=1;j<seats[i];j++)
+            for (int i = 0; i < n; i++)
             {
-                if(occupied[j])
-                    o++;
+                if ((a[i] & (1 << j)) == 0)
+                {
+                    bit[j]++;
+                }
             }
-            total += o;
-            occupied[seats[i]]++;
         }
-        cout<<total<<endl;
-
+        long long ans = 0;
+        for (int j = 30; j >= 0; j--)
+        {
+            if (k >= bit[j])
+            {
+                ans += (1ll << j);
+                k -= bit[j];
+            }
+        }
+        cout << ans << endl;
     }
     return 0;
 }

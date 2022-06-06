@@ -53,12 +53,20 @@ int countPrimes(int n)
     }
     return count;
 }
-
-
-
+long long binpow(long long a, long long b)
+{
+    long long res = 1;
+    while (b > 0)
+    {
+        if (b & 1)
+            res = res * a;
+        a = a * a;
+        b >>= 1;
+    }
+    return res;
+}
 void solve()
 {
-    
 }
 
 int main()
@@ -74,7 +82,31 @@ int main()
     cin >> t;
     while (t--)
     {
-        solve();
+        int n;
+        cin >> n;
+        int arr[n];
+        for (int i = 0; i < n; i++)
+        {
+            cin >> arr[i];
+        }
+        map<int, int> left, right;
+        int sumi = 0, sumj = 0;
+        for (int i = 0, j = n - 1; i < n and j >= 0; i++, j--)
+        {
+            sumi += arr[i];
+            left[sumi] = i;
+            sumj += arr[j];
+            right[sumj] = j;
+        }
+        int ans = 0;
+        for (auto sum : left)
+        {
+            if (right.find(sum.first) != right.end() and sum.second < right[sum.first])
+            {
+                ans = max(ans, n + sum.second + 1 - right[sum.first]);
+            }
+        }
+        cout << ans << endl;
     }
     return 0;
 }

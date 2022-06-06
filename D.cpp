@@ -22,11 +22,11 @@
 using namespace std;
 #define endl '\n'
 typedef long long ll;
-typedef unsigned long long ull;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef pair<string, string> pss;
 typedef vector<int> vi;
+typedef vector<long long> vll;
 typedef vector<vi> vvi;
 typedef vector<pii> vii;
 typedef vector<ll> vl;
@@ -89,22 +89,32 @@ long long binpow(long long a, long long b)
     }
     return res;
 }
-ll solve(string &s, ll k, vector<int> &dp, int i)
-{
-    if (i >= s.size() - 1)
-        return 0;
-    if (dp[i] != -1)
-        return dp[i];
-    ll ans = INT_MAX;
 
-    if ((s[i] - '0') ^ (s[i + 1] - '0') and k)
+bool isPalindrome(string s, int i, int j)
+{
+    while (i < j)
     {
-        swap(s[i], s[i + 1]);
-        ans = stol(s.substr(i, 2)) + solve(s, k - 1, dp, i + 1);
-        swap(s[i], s[i + 1]);
+        if (s[i] != s[j])
+            return false;
+        i++;
+        j--;
     }
-    ans = min(ans, stol(s.substr(i, 2)) + solve(s, k, dp, i + 1));
-    return dp[i] = ans;
+    return true;
+}
+ll solve(vector<ll> &arr, vector<vector<ll>> &dp, ll &k, ll i, ll time)
+{
+    if (time > k)
+        return 0;
+    if (i < 0)
+        return time - 1 + solve(arr, dp, k, i + 1, time + 1);
+    if (i == arr.size())
+        return time - 1 + solve(arr, dp, k, i - 1, time + 1);
+    if (dp[i][time] != -1)
+        return dp[i][time];
+    if (time == 0)
+        return dp[i][time] = max({solve(arr, dp, k, i + 1, time + 1), solve(arr, dp, k, i, time + 1),
+                                  solve(arr, dp, k, i - 1, time + 1)});
+    return dp[i][time] = arr[i] + time - 1 + max({solve(arr, dp, k, i + 1, time + 1), solve(arr, dp, k, i, time + 1), solve(arr, dp, k, i - 1, time + 1)});
 }
 int main()
 {
@@ -119,9 +129,24 @@ int main()
     cin >> t;
     while (t--)
     {
-        int n;
-        cin>>n;
-    }
+        ll n, k;
+        cin >> n >> k;
+        vector<ll> arr(n);
+        ll maxi = -1;
+        for (ll i = 0; i < n; i++)
+        {
+            cin >> arr[i];
+            if (maxi == -1)
+                maxi = i;
+            else if (arr[i] > arr[maxi])
+                maxi = i;
+        }
 
+        ll ans = 0;
+        vector<vector<ll>> dp(n, vector<ll>(k + 1, -1));
+        ll time = 0;
+        ans = max(ans, solve(arr, dp, k, maxi, time));
+        cout << ans << endl;
+    }
     return 0;
 }

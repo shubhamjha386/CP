@@ -15,6 +15,8 @@
 // Sliding Window
 // Prefix Sum suffix sum
 // Two Pointers
+// Disjoint Sets
+// Segment Trees
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -53,12 +55,20 @@ int countPrimes(int n)
     }
     return count;
 }
-
-
-
+long long binpow(long long a, long long b)
+{
+    long long res = 1;
+    while (b > 0)
+    {
+        if (b & 1)
+            res = res * a;
+        a = a * a;
+        b >>= 1;
+    }
+    return res;
+}
 void solve()
 {
-    
 }
 
 int main()
@@ -74,7 +84,51 @@ int main()
     cin >> t;
     while (t--)
     {
-        solve();
+        map<string, vector<int>> m;
+        int n;
+        cin >> n;
+        vector<string> str(n);
+        for (int i = 0; i < n; i++)
+        {
+            cin >> str[i];
+            m[str[i]].push_back(i);
+        }
+        long long ans = 0, idx;
+        string word;
+        for (int i = 0; i < n; i++)
+        {
+            // Check First Character
+            word = str[i];
+            char first = word[0];
+            for (char c = 'a'; c <= 'k'; c++)
+            {
+                if (c != first)
+                {
+                    word[0] = c;
+                    if (m.find(word) != m.end())
+                    {
+                        idx = lower_bound(m[word].begin(), m[word].end(), i) - m[word].begin();
+                        ans += ((ll)m[word].size() - idx);
+                    }
+                }
+            }
+            // Check Last Character
+            word = str[i];
+            first = word[1];
+            for (char c = 'a'; c <= 'k'; c++)
+            {
+                if (c != first)
+                {
+                    word[1] = c;
+                    if (m.find(word) != m.end())
+                    {
+                        idx = lower_bound(m[word].begin(), m[word].end(), i) - m[word].begin();
+                        ans += ((ll)m[word].size() - idx);
+                    }
+                }
+            }
+        }
+        cout << ans << endl;
     }
     return 0;
 }

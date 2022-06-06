@@ -16,13 +16,11 @@
 // Prefix Sum suffix sum
 // Two Pointers
 // Disjoint Sets
-// Segment Trees
 
 #include <bits/stdc++.h>
 using namespace std;
 #define endl '\n'
 typedef long long ll;
-typedef unsigned long long ull;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef pair<string, string> pss;
@@ -31,7 +29,7 @@ typedef vector<vi> vvi;
 typedef vector<pii> vii;
 typedef vector<ll> vl;
 typedef vector<vl> vvl;
-long long mod = 1e9 + 7;
+long long mod = 10e9 + 7;
 
 struct custom_hash
 {
@@ -49,11 +47,6 @@ struct custom_hash
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-int sqr(int x)
-{
-    return x * x;
-}
-constexpr int MAXSUM = 100 * 100 + 10;
 int countPrimes(int n)
 {
     if (n <= 2)
@@ -77,34 +70,8 @@ int countPrimes(int n)
     }
     return count;
 }
-long long binpow(long long a, long long b)
+void solve()
 {
-    long long res = 1;
-    while (b > 0)
-    {
-        if (b & 1)
-            res = res * a;
-        a = a * a;
-        b >>= 1;
-    }
-    return res;
-}
-ll solve(string &s, ll k, vector<int> &dp, int i)
-{
-    if (i >= s.size() - 1)
-        return 0;
-    if (dp[i] != -1)
-        return dp[i];
-    ll ans = INT_MAX;
-
-    if ((s[i] - '0') ^ (s[i + 1] - '0') and k)
-    {
-        swap(s[i], s[i + 1]);
-        ans = stol(s.substr(i, 2)) + solve(s, k - 1, dp, i + 1);
-        swap(s[i], s[i + 1]);
-    }
-    ans = min(ans, stol(s.substr(i, 2)) + solve(s, k, dp, i + 1));
-    return dp[i] = ans;
 }
 int main()
 {
@@ -115,13 +82,15 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t = 1;
+    int t;
     cin >> t;
     while (t--)
     {
         int n;
-        cin>>n;
+        cin >> n;
+        vector<int> ans(n);
+        for (int i = 0; i < n; i++)
+            cin >> ans[i];
     }
-
     return 0;
 }

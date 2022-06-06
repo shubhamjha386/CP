@@ -15,6 +15,8 @@
 // Sliding Window
 // Prefix Sum suffix sum
 // Two Pointers
+// Disjoint Sets
+// Segment Trees
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -30,6 +32,22 @@ typedef vector<ll> vl;
 typedef vector<vl> vvl;
 long long mod = 10e9 + 7;
 
+struct custom_hash
+{
+    static uint64_t splitmix64(uint64_t x)
+    {
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
+    }
+
+    size_t operator()(uint64_t x) const
+    {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
 int countPrimes(int n)
 {
     if (n <= 2)
@@ -63,23 +81,22 @@ void solve()
     {
         cin >> k[i];
     }
-    
-    for(int i=0;i<n;i++)
+
+    for (int i = 0; i < n; i++)
     {
         ll j = 1;
-        while(k[i])
+        while (k[i])
         {
-            if(k[i]<=to_string(j).size())
+            if (k[i] <= to_string(j).size())
             {
-             string tmp = to_string(j);
-              cout<<tmp[k[i]-1]<<endl;
+                string tmp = to_string(j);
+                cout << tmp[k[i] - 1] << endl;
             }
             else
             {
                 k[i] -= to_string(j).size();
-                 j++;
+                j++;
             }
-            
         }
     }
 }

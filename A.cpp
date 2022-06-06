@@ -1,5 +1,6 @@
 // Algorithms You know
 // Brute
+// Constructive
 // Search   --- Binary Search
 // Sort
 // Hash
@@ -15,6 +16,8 @@
 // Sliding Window
 // Prefix Sum suffix sum
 // Two Pointers
+// Disjoint Sets
+// Segment Trees
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -53,40 +56,20 @@ int countPrimes(int n)
     }
     return count;
 }
-
-bool isSorted(int arr[], int l, int h)
+long long binpow(long long a, long long b)
 {
-    for (int i = l + 1; i < h; i++)
-        if (arr[i] != arr[i - 1] + 1)
-            return false;
-    return true;
+    long long res = 1;
+    while (b > 0)
+    {
+        if (b & 1)
+            res = res * a;
+        a = a * a;
+        b >>= 1;
+    }
+    return res;
 }
-bool isAsorted(int arr[], int l, int h)
-{
-    for (int i = l + 1; i < h; i++)
-        if (arr[i] != arr[i - 1] - 1)
-            return false;
-    return true;
-}
-
 void solve()
 {
-    int n;
-    cin >> n;
-    int arr[n];
-    for (int i = 0; i < n; i++)
-    {
-        cin >> arr[i];
-    }
-    for (int i = 1; i < n; i++)
-    {
-        if (!((abs(arr[i] - arr[i - 1]) == 1) || (arr[i] == 1 && arr[i - 1] == n) || (arr[i - 1] == 1 && arr[i] == n)))
-        {
-            cout << "NO" << endl;
-            return;
-        }
-    }
-    cout << "YES" << endl;
 }
 
 int main()
@@ -99,41 +82,31 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while (t--)
     {
-        // solve();
-        int n;
-        cin >> n;
-        string str;
-        cin >> str;
-        int ca = 0, cb = 0, count = 0;
-        for (int j = 0; j < n; j += 2)
+        ll x;
+        cin >> x;
+        ll ans = 0;
+        int zero = -1, one = -1, cnt = 0;
+        for (int i = 0; i <= 30; i++)
         {
-            for (int i = j; i < j + 2; i++)
+            if (x & (1 << i))
             {
-                if (str[i] == 'a')
-                    ca++;
-                else
-                    cb++;
-                if (ca - cb > 1)
-                {
-                    str[i] = 'b';
-                    ca--;
-                    cb++;
-                    count++;
-                }
-                else if (cb - ca > 1)
-                {
-                    str[i] = 'a';
-                    cb--;
-                    ca++;
-                    count++;
-                }
+                if (one == -1)
+                    one = i;
+                cnt++;
+            }
+            else
+            {
+                if (zero == -1)
+                    zero = i;
             }
         }
-        cout << count << endl;
-        cout << str << endl;
+        ans += (1 << one);
+        if (cnt == 1)
+            ans += (1 << zero);
+        cout << ans << endl;
     }
     return 0;
 }
